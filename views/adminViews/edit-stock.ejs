@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+    
+        <div class="pagetitle">
+            <h1>Position</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+                    <li class="breadcrumb-item active">Position Upadete</li>
+
+
+                    
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+                                        
+              <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-6 d-flex flex-column align-items-center justify-content-center">
+        
+                
+        
+                      <div class="card ">
+        
+                        <div class="card-body">
+        
+                          <div class="pt-4">
+                            <h5 class="card-title text-center pb-0 fs-4">Edit Stoct</h5>                          </div>
+                            <% if (context.stock) { %>
+                            <form action="" id="editStock" class="row g-3">
+                                <div class="col-md-4">
+                                  <label for="inputName" class="form-label">Brand</label>
+                                  <input type="text" name="brand" class="form-control"
+                                  value="<%= context.stock.brand %>">
+                                  <div class="nameErr error"></div>
+                                </div>
+                                <div class="col-md-4">
+                                  <label for="inputPackage" class="form-label">Category</label>
+                                  <input type="text" name="category" class="form-control"
+                                  value="<%= context.stock.category %>">
+                                  <div class="cateErr error"></div>
+                                </div>
+
+                                <input name="stock_id" type="hidden" class="form-control" id="Country"
+                        value="<%= context.stock._id %>">
+
+                                <div class="col-md-4">
+                                  <label for="inputPackage" class="form-label">Package type</label>
+                                  <input type="text" name="pakagingType" class="form-control"
+                                  value="<%= context.stock.pakagingType %>">
+                                  <div class="ptypErr error"></div>
+                                </div>
+                                <div class="col-md-4">
+                                 <label for="inputWholesale" class="form-label">Wholesale price</label>
+                                 <input type="text" name="wholePrice" class="form-control"
+                                 value="<%= context.stock.wholePrice %>">
+                                 <div class="whpricErr error"></div>
+                                </div>
+                                <div class="col-md-4">
+                                  <label for="inputUnityprice" class="form-label">unity price</label>
+                                  <input type="number" name="unitPrice" class="form-control"
+                                  value="<%= context.stock.unitPrice %>">
+                                  <div class="unipricErr error"></div>
+                              </div>
+                              <div class="col-md-4">
+                                <label for="inputWholesaleQty" class="form-label">Wholesale Qty</label>
+                                <input type="number" name="wholeQty" class="form-control"
+                                value="<%= context.stock.wholeQty %>">
+                                <div class="whqutyErr error"></div>
+                              </div>
+                             <div class="col-md-4">
+                              <label for="inputUnityQty" class="form-label">unity Qty</label>
+                              <input type="number" name="unitQty" class="form-control"
+                              value="<%= context.stock.unitQty %>">
+                              <div class="uniqtyErr error"></div>
+                             </div>
+                           <div class="col-md-7">
+                            <label for="inputUnityQty" class="form-label">total qty in a packtype</label>
+                            <input type="number" name="totalQtyInPackType" class="form-control"
+                            value="<%= context.stock.totalQtyInPackType %>">
+                            <div class="inpackErr error"></div>
+                           </div>
+                                
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-primary">Register</button>
+                                </div>
+
+            
+                            </form>
+                            <% } %>
+                        </div>
+                      </div>
+        
+                    
+        
+                    </div>
+                  </div>
+                </div>
+        
+              </section>
+              
+        
+            
+          
+       
+    </main>
+    <!-- End #main -->
+    
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <script src="/formHandler/editStock.js"></script>
+    <%- include('../snippets/toast.ejs') %>
+    <!-- Vendor JS Files -->
+    <%- include('../snippets/scripts.ejs') %>
+</body>
+</html>

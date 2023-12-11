@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Profile</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>   
+              <li class="breadcrumb-item active">Profile</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        
+        <section class="section profile">
+          <div class="row">
+            
+            <div class="col-xl-4">
+        
+              <div class="card">
+                <% if (context.admin) { %> 
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+                  <% if (context.admin.image) { %>
+                  <img src="/uploads/<%= context.admin.image %>" alt="Profile" class="rounded-circle align-items-center">
+                  <% } %>
+                  <h2><%= context.admin.userName %></h2>
+                  <h6>Admin</h6>
+                </div>
+              </div>
+    
+            </div>
+    
+            <div class="col-xl-8">
+    
+              <div class="card">
+                <div class="card-body pt-3">
+                  <!-- Bordered Tabs -->
+                  <ul class="nav nav-tabs nav-tabs-bordered">
+    
+                    <li class="nav-item">
+                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                    </li>
+    
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                    </li>
+    
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-change-password">Change Password</button>
+                    </li>
+    
+                  </ul>
+                      
+                  <div class="tab-content pt-2">
+    
+                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
+                      
+    
+                      <h5 class="card-title">Profile Details</h5>  
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label ">User name</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.userName %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Email</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.email %></div>
+                      </div>
+    
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Phone</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.phone %></div>
+                      </div>
+    
+                    </div>
+    
+                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+    
+                      <!-- Profile Edit Form -->
+                      <form id="updateForm" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                          <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                          <div class="col-md-8 col-lg-9">
+                            <% if (context.admin.image) { %>
+                              <img src="/uploads/<%= context.admin.image %>" alt="Profile" class="rounded-circle align-items-center">
+                              <% } %>
+                              <div class="mb-3">
+                                <label for="imageUpload">Select an image:</label>
+                              <input type="file" name="image" id="imageUpload">
+                            </div>
+                          </div>
+                        </div>
+    
+                        <div class="row mb-3">
+                          <label for="fullName" class="col-md-4 col-lg-3 col-form-label">User name</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="userName" class="form-control" id="fullName" value="<%= context.admin.userName %>">
+                          </div>
+                          <div class="error uNameErr"></div>
+                        </div>
+    
+                        <div class="row mb-3">
+                          <label for="Email" class="col-md-4 col-lg-3 col-form-label">Email</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="email" name="email" class="form-control" id="Email" value="<%= context.admin.email %>">
+                          </div>
+                          <div class="error emailErr"></div>
+                        </div>
+                        
+                        <input name="admin_id" type="hidden" class="form-control" id="Country"
+                        value="<%= context.admin._id %>">
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="number" name="phone" class="form-control" id="Phone" value="<%= context.admin.phone %>">
+                          </div>
+                          <div class="error phoneErr"></div>
+                        </div>
+    
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                      </form><!-- End Profile Edit Form -->
+    
+                    </div>
+    
+                    <div class="tab-pane fade pt-3" id="profile-settings">
+    
+    
+                    </div>
+    
+                    <div class="tab-pane fade pt-3" id="profile-change-password">
+                      <div class="msg p-3 text-dark"></div>
+                      <!-- Change Password Form -->
+                      <form id="change_password">
+    
+                        <div class="row mb-3">
+                          <label for="currentPassword" class="col-md-4 col-lg-3 col-form-label">Current Password</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input name="old_password" type="password" class="form-control" id="currentPassword">
+                          </div>
+                          <div class="old_passwordErr error"></div>
+                        </div>
+    
+                        <div class="row mb-3">
+                          <label for="newPassword" class="col-md-4 col-lg-3 col-form-label">New Password</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input name="newPassword" type="password" class="form-control" id="newPassword">
+                          </div>
+                          <div class="newpasswordErr error"></div>
+                        </div>
+    
+                        <div class="row mb-3">
+                          <label for="renewPassword" class="col-md-4 col-lg-3 col-form-label">Re-enter New Password</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input name="password2" type="password" class="form-control" id="renewPassword">
+                          </div>
+                          <div class="password2Err error"></div>
+                        </div>
+    
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary">Change Password</button>
+                        </div>
+                      </form><!-- End Change Password Form -->
+    
+                    </div>
+    
+                  </div><!-- End Bordered Tabs -->
+                  <% } %> 
+                </div>
+              </div>
+    
+            </div>
+          </div>
+        </section>
+      
+    
+      </main><!-- End #main -->
+    <!-- End #main -->
+    <!-- Scrollable modal -->
+    
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/formHandler/editProfile.js"></script>
+    <script src="/formHandler/changePassword.js"></script>
+    <%- include('../snippets/toast.ejs') %>
+    <%- include('../snippets/scripts.ejs') %>
+</body>
+</html>
+
