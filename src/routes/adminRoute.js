@@ -3,7 +3,7 @@ const adminCont = require('../controllers/adminCont');
 const {auth} = require('../middlewares/authMiddlewares');
 const {imgHandler} = require('../helpers/imgHandler')
 
-const router = express.Router();   
+const router = express.Router();       
 
 router.get('/home', auth, adminCont.home);     
 router.get('/departments', auth, adminCont.getDepartments);
@@ -20,15 +20,21 @@ router.post('/delete-department', auth, adminCont.delete_department);
 router.post('/register-position', auth, adminCont.registerPositions);
 router.get('/edit-position', auth, adminCont.get_EditPosition); 
 router.post('/edit-position', auth, adminCont.editPosition);   
-router.post('/delete-position', auth, adminCont.delete_position);
+router.post('/delete-position', auth, adminCont.delete_position);  
 router.get('/stocks', auth, adminCont.getStocks);
 router.post('/register-stock', auth, adminCont.registerStock);   
 router.post('/delete-stock', auth, adminCont.delete_stock);
 router.get('/edit-stock', auth, adminCont.get_EditStock);
-router.post('/edit-stock', auth, adminCont.editStock);   
-router.get('/sales', auth, adminCont.getSales); 
-router.post('/add-sale', auth, adminCont.addSales); 
+router.post('/edit-stock', auth, adminCont.editStock);
+router.post('/process-Sale', auth, adminCont.processSale);   
+router.get('/package', auth, adminCont.getPackage);    
+router.post('/add-packages', auth, adminCont.addPackage); 
+router.get('/edit-package', auth, adminCont.get_EditPackage);
+router.post('/edit-package', auth, adminCont.editPackage);
+router.post('/delete-package', auth, adminCont.delete_package);
 router.get('/payroll', auth, adminCont.getPayroll);
+router.get('/pay-salary', auth, adminCont.getPaySalary);
+router.post('/payroll', auth, adminCont.createPayroll);
 router.get('/create-admin', auth, adminCont.get_creatNewAdmin);
 router.post('/create-admin', auth, imgHandler, adminCont.creatNewAdmin);
 router.get('/registered-admin', auth, adminCont.get_registeredAdmin);  

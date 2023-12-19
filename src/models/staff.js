@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const staffSchema = mongoose.Schema({
 
     fName: {
-        type: String,
+        type: String,        
         required: true
     },
 
@@ -13,7 +13,7 @@ const staffSchema = mongoose.Schema({
     },
 
     address: {
-        type: String,
+        type: String,                                         
         required: true,
     },
 

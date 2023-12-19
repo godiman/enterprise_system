@@ -23,11 +23,13 @@ const stockSchema = mongoose.Schema({
     }, 
     wholeQty: {
         type: String,
-        required: true
+        required: true,
+        default: 0
     }, 
     unitQty: {
         type: String,
-        required: true
+        required: true,
+        default: 0
     }, 
     totalQtyInPackType: {
         type: String,

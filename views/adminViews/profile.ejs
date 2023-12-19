@@ -87,9 +87,46 @@
                       </div>
     
                       <div class="row">
-                        <div class="col-lg-3 col-md-4 label">Phone</div>
-                        <div class="col-lg-9 col-md-8"><%= context.admin.phone %></div>
+                        <div class="col-lg-3 col-md-4 label">Address</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.address %></div>
                       </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Date Of Birth</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.dateOfBirth %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Gender</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.gender %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Position</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.position %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Department</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.department %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Staff Type</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.staffType %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Contract End</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.contractEndDate %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Salary</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.amount %></div>
+                      </div>
+
+                      
     
                     </div>
     
@@ -107,6 +144,7 @@
                                 <label for="imageUpload">Select an image:</label>
                               <input type="file" name="image" id="imageUpload">
                             </div>
+                            <div class="imgErr"></div>
                           </div>
                         </div>
     
@@ -130,11 +168,67 @@
                         value="<%= context.admin._id %>">
 
                         <div class="row mb-3">
-                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Phone</label>
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Address</label>
                           <div class="col-md-8 col-lg-9">
-                            <input type="number" name="phone" class="form-control" id="Phone" value="<%= context.admin.phone %>">
+                            <input type="text" name="address" class="form-control" id="address" value="<%= context.admin.address %>">
                           </div>
-                          <div class="error phoneErr"></div>
+                          <div class="error addressErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">DOB</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="dateOfBirth" class="form-control" id="Phone" value="<%= context.admin.dateOfBirth %>">
+                          </div>
+                          <div class="error dobErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Gender</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="gender" class="form-control" id="Phone" value="<%= context.admin.gender %>">
+                          </div>
+                          <div class="error genderErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Position</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="position" class="form-control" id="Phone" value="<%= context.admin.position %>">
+                          </div>
+                          <div class="error positionErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Department</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="department" class="form-control" id="Phone" value="<%= context.admin.department %>">
+                          </div>
+                          <div class="error departErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">staff Type</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="staffType" class="form-control" id="Phone" value="<%= context.admin.staffType %>">
+                          </div>
+                          <div class="error staffErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Contract End</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="" class="form-control" id="contractEndDate" value="<%= context.admin.contractEndDate %>">
+                          </div>
+                          <div class="error contractErr"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Salary</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="amount" class="form-control" id="amount" value="<%= context.admin.amount %>">
+                          </div>
+                          <div class="error amtErr"></div>
                         </div>
     
                         <div class="text-center">

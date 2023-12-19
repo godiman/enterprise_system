@@ -61,7 +61,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <% if (context.stocks) { %>
+                          <% if (context.stocks) { %>  
                             <% context.stocks.forEach(stock => { %>
                           <tr>                            <td><%= stock.brand %></td>
                             <td><%= stock.category %></td>
@@ -72,8 +72,8 @@
                             <td><%= stock.unitQty %></td>
                             <td><%= stock.totalQtyInPackType %></td>
                             <td>
-                              <a href="/admin/edit-stock/?stock_id=<%= stock._id %>" type="button" class="btn btn-outline-info btn-sm d-flex">Edit</a>
-                                <button type="button" class="btn btn-outline-danger btn-sm d-flex"
+                              <a href="/admin/edit-stock/?stock_id=<%= stock._id %>" type="button" class="btn d-flex align-items-center btn-outline-info btn-sm">Edit</a>
+                                <button type="button" class="btn d-flex align-items-center btn-outline-danger btn-sm"
                                 onclick=" return  deleteStock('<%= stock._id %>')">Delete</button>
                             </td>
                           </tr> 
@@ -116,7 +116,15 @@
                     </div>
                     <div class="col-md-4">
                       <label for="inputPackage" class="form-label">Package type</label>
-                      <input type="text" name="pakagingType" class="form-control">
+                      <select name="pakagingType" class="form-select">
+                        <option selected value="">Select Package</option>
+                        <% if (context.packages) { %>
+                        <% context.packages.forEach(package=> { %>
+                        <option value="<%= package.pakagingType %>"><%= package.pakagingType %></option>
+                        <% }) %>
+                        <% } %>                                  
+                    </select>
+                  
                     </div>
                     <div class="col-md-4">
                      <label for="inputWholesale" class="form-label">Wholesale price</label>
@@ -140,7 +148,7 @@
                </div>
                     
                     <div class="col-6">
-                        <button type="submit" class="btn btn-primary">Register</button>
+                        <button type="submit" class="btn btn-success">Register</button>
                     </div>
 
                     <div class="nameErr error"></div>
@@ -150,7 +158,7 @@
             
             </div>
         </div>
-     </div>
+      </div>
 
     <!-- ======= Footer ======= -->
     <%- include('../snippets/adminFooter.ejs') %>

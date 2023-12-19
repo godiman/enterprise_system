@@ -8,8 +8,8 @@ const authRoute = require('./src/routes/authRoute');
 const staffRoute = require('./src/routes/staffRoute');
 const stockRoute = require('./src/routes/stockRoute');
 const { dbconnect } = require('./config/dbConnection');
-const cookieParser = require('cookie-parser');      
-const path = require('path');
+const cookieParser = require('cookie-parser');  
+const path = require('path');     
 
 const app = express();
 

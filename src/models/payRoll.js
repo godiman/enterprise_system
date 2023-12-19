@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const payRollSchema = mongoose.Schema({
+const payRollSchema  = mongoose.Schema({
     staff: {
         type: mongoose.Schema.ObjectId,
         ref: 'staff'
@@ -9,12 +9,16 @@ const payRollSchema = mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'position'
     },
-    workerSalery: {
+    workerSalery: {     
         type: String,
-        required: true
-    },
+        required: true 
+    }, 
     workerAllowance: {
         type: String,
+    },
+    status: {
+        type: Boolean,
+        default: false,
     },
     date: {
         type: Date,
@@ -22,6 +26,6 @@ const payRollSchema = mongoose.Schema({
     }
 });
 
-const payRoll = mongoose.model('payRoll', payRollSchema)
+const PayRoll  = mongoose.model('PayRoll ', payRollSchema)
 
-module.exports = payRoll;
+module.exports = PayRoll ;

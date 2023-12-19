@@ -20,11 +20,11 @@
     <main id="main" class="main">
     
         <div class="pagetitle">
-            <h1>Position</h1>
+            <h1>Stock</h1>
             <nav>
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
-                    <li class="breadcrumb-item active">Position Upadete</li>
+                    <li class="breadcrumb-item active">Stock Upadete</li>
 
 
                     
@@ -35,7 +35,7 @@
               <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
                 <div class="container">
                   <div class="row justify-content-center">
-                    <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+                    <div class="col-lg-8 col-md-6 d-flex flex-column align-items-center justify-content-center">
         
                 
         
@@ -44,27 +44,29 @@
                         <div class="card-body">
         
                           <div class="pt-4">
-                            <h5 class="card-title text-center pb-0 fs-4">Edit Position</h5>                          </div>
+                            <h5 class="card-title text-center pb-0 fs-4">Edit Package Type</h5>                          </div>
+                            <% if (context.package) { %>
+                            <form action="" id="editPackage" class="row g-3">
+                                <div class="col-12">
+                                  <label for="inputName" class="form-label">Pacckage Type</label>
+                                  <input type="text" name="pakagingType" class="form-control"
+                                  value="<%= context.package.pakagingType %>">
+                                  <div class="nameErr error"></div>
+                                </div>
                             
-                            <% if (context.position) { %>    
-                          <form id="editPosition" class="row g-3">                  
-                            <div class="col-12">
-                              <label for="yourName" class="form-label">Position name</label>                              
-                              <input type="text" name="name" class="form-control" 
-                              value="<%= context.position.name %>">
-                               <div class="nameErr error"></div>                        
-                            </div>   
 
-                            <input name="position_id" type="hidden" class="form-control" id="Country"
-                        value="<%= context.position._id %>">
+                                <input name="package_id" type="hidden" class="form-control" id="Country"
+                        value="<%= context.package._id %>">
 
-                            <div class="col-12">
-                              <button class="btn btn-success w-100" type="submit">Register</button>
-                            </div>
-                            
-                          </form>
-                          <% } %>
-                            
+                                
+                                
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-success">Register</button>
+                                </div>
+
+            
+                            </form>
+                            <% } %>
                         </div>
                       </div>
         
@@ -91,7 +93,7 @@
     <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
     class="bi bi-arrow-up-short"></i></a>
 
-    <script src="/formHandler/editPosition.js"></script>
+    <script src="/formHandler/editPackage.js"></script>
     <%- include('../snippets/toast.ejs') %>
     <!-- Vendor JS Files -->
     <%- include('../snippets/scripts.ejs') %>

@@ -3,7 +3,8 @@ const Department = require('../models/department');
 const Staff = require('../models/staff');
 const Position = require('../models/position');
 const Stock = require('../models/stock');
-const Sales = require('../models/sales');
+const Payroll = require('../models/payRoll'); 
+const Package = require('../models/package');
 const bcrypt = require('bcryptjs');
 const { default: mongoose } = require('mongoose');     
 
@@ -13,6 +14,15 @@ module.exports = {
         const context = {}
 
         try {
+            const allStock = await Stock.countDocuments()
+            context['stocks'] = allStock
+
+            const allStaffs = await Staff.countDocuments()
+            context['staffs'] = allStaffs
+
+            const allAdmin = await Admin.countDocuments()
+            context['admins'] = allAdmin
+
             const admin = await Admin.findOne({ _id: req.admin })         
             context['admin'] = admin
             return res.render('./adminViews/home', { context });
@@ -163,7 +173,7 @@ module.exports = {
             context['staff'] = _staffById
 
             const allDepartments = await Department.find();
-            context['departments'] = allDepartments
+            context['departments'] = allDepartments 
 
             const allPosition = await Position.find();
             context['positions'] = allPosition
@@ -390,7 +400,7 @@ module.exports = {
             res.status(500).json({ error: error.message });
         }
     },
-
+    
     delete_position: async (req, res) => {
         const { position_id } = req.body 
         try {
@@ -409,13 +419,16 @@ module.exports = {
             console.log(error);
             return res.status(500).json({ error: error.message }) 
         }
-    },    
+    },     
 
     getStocks: async (req, res) =>{     
         const context = {}
         try {
             const allStocks = await Stock.find();   
             context['stocks'] = allStocks
+
+            const allPackages = await Package.find();
+            context['packages'] = allPackages
 
             const admin = await Admin.findOne({ _id: req.admin });        
             context['admin'] = admin
@@ -439,10 +452,10 @@ module.exports = {
             if (!namePattern.test(brand)) {
                 throw Error('Brand name should only contain letters and space!');
             }
-            if (!/^[a-zA-Z]+$/.test(category)) {
+            if (!namePattern.test(category)) {
                 throw Error('Category Filed is not correctly filled'); 
             }
-            if (!/^[a-zA-Z0-9\s-,]+$/.test(pakagingType)) {
+            if (!/^[a-zA-Z0-9\s-,]+$/.test(pakagingType)) {   
                 throw Error('Invalid Packaging Type format');
             }
             if (!/^[a-zA-Z0-9\s.,']+$/.test(wholePrice)) {
@@ -462,7 +475,16 @@ module.exports = {
             }
 
             // Create Department
-            const stockAdded = await Stock.create({ brand, category, pakagingType, wholePrice, unitPrice, wholeQty, unitQty, totalQtyInPackType })
+            const stockAdded = await Stock.create({
+                brand, 
+                category, 
+                pakagingType, 
+                wholePrice, 
+                unitPrice, 
+                wholeQty, 
+                unitQty, 
+                totalQtyInPackType 
+            })
             console.log(stockAdded);
             return res.status(200).json({
                 success: true,
@@ -564,29 +586,67 @@ module.exports = {
         }
     },
 
-    getSales: async (req, res) =>{
+    processSale: async (req, res) => {
+        const { stockIds, quantities } = req.body.data;
+    
+        try {
+            // Find and update each stock item in the database
+            const updatedStocks = await Promise.all(stockIds.map(async (stockId, index) => {
+                const quantityToDeduct = quantities[index];
+    
+                // Find the stock item in the database
+                const stock = await Stock.findById(stockId);
+                console.log(stock);
+    
+                if (!stock) {
+                    throw new Error(`Stock with ID ${stockId} not found.`);
+                }
+    
+                // Check if unitQty is sufficient
+                if (stock.unitQty < quantityToDeduct) {
+                    throw new Error(`Insufficient quantity for stock with ID ${stockId}.`);
+                }
+    
+                // Subtract quantityToDeduct from unitQty
+                stock.unitQty -= quantityToDeduct;
+    
+                // Save the updated stock item
+                await stock.save();
+    
+                return stock;
+            }));
+    
+            return res.status(200).json({
+                success: true,
+                msg: 'Sale processed successfully',
+                updatedStocks,
+                redirectURL: '/admin/view-stocks'
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: error.message });
+        }
+    },  
+    
+
+    getPackage: async (req, res) =>{
         const context = {}
         try {
-            const allSales = await Sales.find();
-            context['sales'] = allSales
-
-            const allStocks = await Stock.find();   
-            context['stocks'] = allStocks
+            const allPackages = await Package.find();
+            context['packages'] = allPackages
 
             const admin = await Admin.findOne({ _id: req.admin });        
             context['admin'] = admin
 
-            res.render('./adminViews/sales', {context})
+            res.render('./adminViews/package', {context})
         } catch (error) {
             return res.status(500).json({error: error.message}) 
         }
         
     },
 
-    addSales: async (req, res) => {
-        const { 
-            brand, category, pakagingType, wholePrice, unitPrice, wholeQty, unitQty 
-        } = req.body;
+    addPackage: async (req, res) => {
+        const {pakagingType} = req.body;
         console.log(req.body);
 
         try {
@@ -594,40 +654,89 @@ module.exports = {
             const namePattern = /^[a-zA-Z\s]+$/;
 
             // Validate the fileds
-            if (!namePattern.test(brand)) {  
-                throw Error('Brand name should only contain letters and space!');
-            }
-            if (!/^[a-zA-Z]+$/.test(category)) {
-                throw Error('Category Filed is not correctly filled'); 
-            }
-            if (!/^[a-zA-Z0-9\s-,]+$/.test(pakagingType)) {
-                throw Error('Invalid Packaging Type format');
-            }
-            if (!/^[a-zA-Z0-9\s.,']+$/.test(wholePrice)) {
-                throw Error('Invalid Whole Price Format');
-            }
-            if (!/^[a-zA-Z0-9\s.,']+$/.test(unitPrice)) {
-                throw Error('Invalid unit price Format');
-            }
-            if (!/^[a-zA-Z0-9\s.,]+$/.test(wholeQty)) {
-                throw Error('Invalid whole Qty Format');
-            }
-            if (!/^[a-zA-Z0-9\s]+$/.test(unitQty)) {
-                throw Error('Invalid unit Qty Format');
+            if (!namePattern.test(pakagingType)) {  
+                throw Error('Package type name should only contain letters and space!');
             }
 
             // Create Department
-            const stockAdded = await Stock.create({ brand, category, pakagingType, wholePrice, unitPrice, wholeQty, unitQty })
-            console.log(stockAdded);
+            const packageAdded = await Package.create({ pakagingType })
+            console.log(packageAdded);
             return res.status(200).json({
                 success: true,
-                msg: 'Stock Added Successfully',
-                redirectURL: '/admin/view-stocks'
+                msg: 'Package Added Successfully',      
+            
             });
 
         }   catch (error) {
             console.log(error);
             res.status(500).json({ error: error.message });
+        }
+    },
+
+    get_EditPackage: async(req, res) => {   
+        const context = {}
+        try {
+            const _packageById = await Package.findOne({_id: req.query.package_id});
+            context['package'] = _packageById
+
+            const admin = await Admin.findOne({ _id: req.admin })         
+            context['admin'] = admin
+
+            return res.render('./adminViews/edit-package', {context});
+        }   catch (error) {
+            console.log(error);
+            return res.status(500).json({ error: error.message })
+        }
+        
+    },
+
+    editPackage: async (req, res) => {
+        const {pakagingType, package_id } = req.body;
+        console.log(req.body);
+
+        try {
+            // Contruct Regex
+           const namePattern = /^[a-zA-Z\s]+$/;
+
+           // Validate the fileds
+           if (!namePattern.test(pakagingType)) {  
+               throw Error('Package type name should only contain letters and space!');
+           }
+           
+            
+
+            // Update package
+            const editPackage = await Package.findOneAndUpdate({_id: package_id},{pakagingType})
+            console.log(editPackage);
+            return res.status(200).json({
+                success: true,
+                msg: 'Package Type Updated Successfully',       
+            
+            });
+
+        }   catch (error) {
+            console.log(error);
+            res.status(500).json({ error: error.message });
+        }
+    },
+
+    delete_package: async (req, res) => {
+        const { package_id } = req.body 
+        try {
+            if (!package_id == mongoose.Schema.ObjectId) {     
+                throw Error('Invalid Data')
+            }
+            const _deletepackage = await Package.findOneAndDelete({_id: package_id });
+            console.log(_deletepackage); 
+            return res.status(200).json( 
+                {
+                    success: true,
+                    msg: 'Stock Deleted Successfully',
+                    redirectURL: '/admin/package'
+                })
+        } catch (error) { 
+            console.log(error);
+            return res.status(500).json({ error: error.message }) 
         }
     },
 
@@ -644,9 +753,6 @@ module.exports = {
             const allPosition = await Position.find();
             context['positions'] = allPosition
 
-            const _staffById = await Staff.findOne({_id: req.query.staff_id});
-            context['staff'] = _staffById
-
             const admin = await Admin.findOne({ _id: req.admin });         
             context['admin'] = admin
 
@@ -656,6 +762,67 @@ module.exports = {
         }
        
     },
+
+    getPaySalary: async (req, res) =>{
+        
+        const context = {}
+        try {
+            const allStaffs = await Staff.findOne({_id: req.query.staff_id});
+            context['staff'] = allStaffs
+
+            const allPosition = await Position.find();
+            context['positions'] = allPosition
+
+            const admin = await Admin.findOne({ _id: req.admin });         
+            context['admin'] = admin
+
+            res.render('./adminViews/pay-salary.ejs', {context})
+        } catch (error) {
+            return res.status(500).json({error: error.message}) 
+        }
+       
+    },
+
+    createPayroll: async (req, res) => {
+        try {
+          const {
+            name,
+            position,
+            amount,
+            allowance,
+            paystackEmail,
+            paystackAmount,
+            employeeName,
+            salary
+          } = req.body;
+      
+          // Create a new Payroll object
+          const newPayroll = new Payroll({
+            staff: req.user._id, // Assuming you have a user object in the request (e.g., after authentication)
+            position,
+            workerSalery: amount,
+            workerAllowance: allowance,
+            // Add other fields as needed
+          });
+          console.log(newPayroll);
+      
+          // Save the Payroll object to the database
+          const savedPayroll = await newPayroll.save();
+      
+          // You can perform additional actions or send a response as needed
+          res.status(201).json({
+            success: true,
+            message: 'Payroll created successfully',
+            data: savedPayroll,
+          });
+        } catch (error) {
+          console.error('Error creating payroll:', error);
+          res.status(500).json({
+            success: false,
+            message: 'Internal server error',
+          });
+        }
+      },
     
     get_creatNewAdmin: async (req, res) => {
         const context = {}
@@ -811,7 +978,7 @@ module.exports = {
             console.log(error);
             return res.status(500).json({ error: error.message }) 
         }
-    },
+    },    
 
     getProfile: async (req, res) =>{
         const context = {}
@@ -826,18 +993,17 @@ module.exports = {
             console.log(error)
             return res.status(500).json({ error: error.message })
         }
-    },
+    },   
 
     updateProfile: async (req, res) =>{
         
-        const { userName, email, phone, image } = req.body;
+        const { userName, email,  address, dateOfBirth, gender, position, department, staffType, contractEndDate, amount, image } = req.body;
         console.log(req.body);          
 
         try {
             const namePattern = /^[a-zA-Z\s]+$/;
-            const emailPattern =  /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            const phone_noPattern = /^[0-9]+$/;
-
+            const emailPattern = /^[a-z0-9]([a-z0-9_\.\-])*\@(([a-z0-9])+(\-[a-z0-9]+)*\.)+([a-z0-9]{2,4})/;
+            const addressPattern = /^[a-zA-Z\s\.\-\S]+$/;
 
             if (!namePattern.test(userName)) {
                 throw Error('Name should only contain letters and space!');
@@ -845,12 +1011,39 @@ module.exports = {
             if (!emailPattern.test(email)) {
                 throw Error('Enter a valid email address'); 
             }
-            if (!phone_noPattern.test(phone)) {
-                throw Error('Enter a valid Phone Number');   
+            if (!addressPattern.test(address)) {
+                throw Error('Please address must not be empty');
             }
+            if (!/[0-9\s\W]/.test(dateOfBirth)) {
+                throw Error('Date of Birth is not Correctly filled');
+            }
+            if (!/[a-zA-Z\s\d]/.test(gender)) {
+                throw Error('Gender Is not correctly filled');
+            }
+            if (!/[a-zA-Z0-9\s\d]/.test(position)) {
+                throw Error('Position is not Correctly Filled');
+            }
+            if (!/[a-zA-Z\s\d]/.test(department)) {
+                throw Error('Department  is not Correctly Filled');
+            }
+            if (!/[a-zA-Z\s\d]/.test(staffType )) {
+                throw Error('Staff Type is not Correctly Filled');
+            }
+            if (!/[0-9\s\W]/.test(contractEndDate)) {
+                throw Error('Contarct Date Ending is not Correctly Filled');
+            }
+            if (!/[a-zA-Z0-9\s\W]/.test(amount)) {  
+                throw Error('Add salary');
+            }
+            if (req.fileValidationError === '') {
+                throw new Error(req.fileValidationError);
+            }
+           
 
+            // const image = req.file.filename;
+           
             //  ========== Insert the user to the bd======
-            const _updateProfile = await Admin.findOneAndUpdate({_id: req.admin},{userName, email, phone, image});
+            const _updateProfile = await Admin.findOneAndUpdate({_id: req.admin},{userName, email,  address, dateOfBirth, gender, position, department, staffType, image, contractEndDate, amount, image});
             console.log(_updateProfile);
           return res.status(200).json({ 
             success: true,
@@ -896,7 +1089,7 @@ module.exports = {
     },
 
     getRegistration: async (req, res) =>{
-        res.render('./adminViews/register') 
+        res.render('./adminViews/register')   
     },
 
     getLogin: async (req, res) => {

@@ -44,8 +44,8 @@ module.exports = {
                 throw Error('Contarct Date Ending is not Correctly Filled');
             }
 
-            // Create Staff
-            const staffCreated = await Staff.create({ 
+            // Create Staff saff_id
+            const staffCreated = await Staff.create({ staff: 
                 fName, email, address, dateOfBirth, gender, position, department, staffType, qualification, contractEndDate
             })
 

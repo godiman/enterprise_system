@@ -57,7 +57,7 @@
                             </thead>
                             <tbody>
                                 <% if (context.staffs) { %>
-                                    <% context.staffs.forEach(staff => { %>
+                                <% context.staffs.forEach(staff => { %>
                                 <tr>
                                     <th scope="row">1</th>
                                     <td><%= staff.fName %></td>
@@ -76,6 +76,10 @@
                                               <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
                                             <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="/admin/pay-salary/?staff_id=<%= staff._id %>"
+                                                    ><i class="bx bx-edit-alt me-1"></i>Pay</a
+                                                  >
+
                                               <a class="dropdown-item" href="/admin/staff-details/?staff_id=<%= staff._id %>"
                                                 ><i class="bx bx-edit-alt me-1"></i>Details</a
                                               >
