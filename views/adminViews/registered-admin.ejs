@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+    
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+    
+        <div class="pagetitle">
+            <h1>Admins</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+                    <li class="breadcrumb-item active">All Admin</li>
+                </ol>            </nav>
+        </div><!-- End Page Title -->
+    
+        <section class="section">
+            <div class="row">
+                <div class="col-lg-12">
+    
+                    <div class="table-responsive">
+                        <table border="1" id="dataTable" class="table table-striped table-sm table datatable">
+    
+                            <!-- Table with stripped rows -->
+    
+                            <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">DOB</th>
+                                    <th scope="col">Gender</th>   
+                                    <th scope="col">Position</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Staff Typ</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (context.admins) { %>
+                                    <% context.admins.forEach(admin => { %>
+                                <tr>
+                                    <td><%= admin.userName %></td>
+                                    <td><%= admin.email %></td>
+                                    <td><%= admin.address %></td>
+                                    <td><%= admin.dateOfBirth %></td>
+                                    <td><%= admin.gender %></td>
+                                    <td><%= admin.position %></td>
+                                    <td><%= admin.department %></td>
+                                    <td><%= admin.staffType %></td>
+
+                                    <td>
+                                        
+                                        <div class="dropdown">
+                                            <button type="button" class="btn btn-success p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                              <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
+                                            <div class="dropdown-menu">
+                                              <a class="dropdown-item" href="/admin/admin-details/?admin_id=<%= admin._id %>"
+                                                ><i class="bx bx-edit-alt me-1"></i>Details</a
+                                              >
+                                              <a class="dropdown-item" href=""
+                                              onclick=" return  deleteAdmin('<%= admin._id %>')"><i class="bx bx-trash me-1"></i> Delete</a
+                                              >
+                                            </div>
+                                          </div> 
+                                    </td>
+                                </tr>
+                                <% }) %>                      
+                                <% } %>
+                            </tbody>
+    
+                            <!-- End Table with stripped rows -->
+                        </table>
+                    </div>
+    
+                </div>
+            </div>
+        </section>
+    
+    </main>
+    <!-- End #main -->
+   
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <!-- <script src="/formHandler/staff.js"></script> -->
+    <script src="/formHandler/deleteAdmin.js"></script>
+    <%- include('../snippets/toast.ejs') %>
+    <%- include('../snippets/scripts.ejs') %>
+
+</body>
+</html>

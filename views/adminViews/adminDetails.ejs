@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+          <h1>Profile</h1>
+          <nav>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>   
+              <li class="breadcrumb-item active">Profile</li>
+            </ol>
+          </nav>
+        </div><!-- End Page Title -->
+
+        
+        <section class="section profile">
+          <div class="row">
+            
+            <div class="col-xl-4">
+        
+              <div class="card">
+                <% if (context.admins) { %>
+                <div class="card-body profile-card pt-4 d-flex flex-column align-items-center">
+    
+                  <% if (context.admin.image) { %>
+                    <img src="/uploads/<%= context.admin.image %>" alt="Profile" class="rounded-circle align-items-center">
+                    <% } %>
+                  <h3 class="text-center"><%= context.admin.userName %></h3>
+                  <h6><%= context.admin.position %></h6>
+                </div>
+              </div>
+    
+            </div>
+    
+            <div class="col-xl-8">
+    
+              <div class="card">
+                <div class="card-body pt-3">
+                  <!-- Bordered Tabs -->
+                  <ul class="nav nav-tabs nav-tabs-bordered">
+    
+                    <li class="nav-item">
+                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profile-overview">Overview</button>
+                    </li>
+    
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#profile-edit">Edit Profile</button>
+                    </li>
+    
+                  </ul>
+                       
+                  <div class="tab-content pt-2">
+    
+                    <div class="tab-pane fade show active profile-overview" id="profile-overview">
+
+                      
+    
+                      <h5 class="card-title">Profile Details</h5>  
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label ">User name</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.userName %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Email</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.email %></div>
+                      </div>
+    
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Address</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.address %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">DOB</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.dateOfBirth %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Gender</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.gender %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Position</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.position %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Department</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.department %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">admin Status</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.staffType %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Contract End</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.contractEndDate %></div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-lg-3 col-md-4 label">Salary</div>
+                        <div class="col-lg-9 col-md-8"><%= context.admin.amount %></div>
+                      </div>
+    
+                    </div>
+    
+                    <div class="tab-pane fade profile-edit pt-3" id="profile-edit">
+    
+                      <!-- Profile Edit Form -->
+                      <form id="update_staff" enctype="multipart/form-data">
+                        <div class="row mb-3">
+                          <label for="profileImage" class="col-md-4 col-lg-3 col-form-label">Profile Image</label>
+                          <div class="col-md-8 col-lg-9">
+                            
+                            <% if (context.admin.image) { %>
+                              <img src="/uploads/<%= context.admin.image %>" alt="Profile" class="rounded-circle align-items-center">
+                              <% } %>
+                            <div class="mb-3">
+                              <label for="imageUpload">Select an image:</label>
+                            <input type="file" name="image" id="imageUpload">
+                          </div>
+                          </div>     
+                        </div>
+    
+                        <div class="row mb-3">
+                          <label for="fullName" class="col-md-4 col-lg-3 col-form-label">Position</label>
+                          <div class="col-md-8 col-lg-9">
+                            <select name="position" class="form-select">
+                              <option selected value="<%= context.admin.position %>"><%= context.admin.position %></option>
+                              <% if (context.positions) { %>
+                                  <% context.positions.forEach(position=> { %>
+                                  <option value="<%= position.name %>"><%= position.name %></option>
+                                  <% }) %>
+                                  <% } %>                                                                 
+                          </select> 
+                          </div>
+                          <div class="positionErr error"></div>
+                        </div>
+                        
+    
+                        <div class="row mb-3">
+                          <label for="Email" class="col-md-4 col-lg-3 col-form-label">Department</label>
+                          <div class="col-md-8 col-lg-9">
+                            <select name="department" class="form-select">
+                              <option selected value="<%= context.admin.department %>"><%= context.admin.department %></option>
+                              <% if (context.departments) { %>
+                              <% context.departments.forEach(department=> { %>
+                              <option value="<%= department.departName %>"><%= department.departName %></option>
+                              <% }) %>
+                              <% } %>                                  
+                          </select>
+                          </div>
+                          <div class="departErr error"></div>
+                        </div>
+                        
+                        <input name="admin_id" type="hidden" class="form-control"
+                        value="<%= context.admin._id %>">
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Staff Status</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="staffType" class="form-control"  value="<%= context.admin.staffType %>">
+                          </div>
+                          <div class="staffErr error"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Contract End</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="date" name="contractEndDate" class="form-control"  value="<%= context.admin.contractEndDate %>">
+                          </div>
+                          <div class="contractErr error"></div>
+                        </div>
+
+                        <div class="row mb-3">
+                          <label for="Phone" class="col-md-4 col-lg-3 col-form-label">Salary</label>
+                          <div class="col-md-8 col-lg-9">
+                            <input type="text" name="amount" class="form-control"  value="<%= context.admin.amount %>">
+                          </div>
+                          <div class="amtErr error"></div>
+                        </div>
+    
+                        <div class="text-center">
+                          <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                      </form><!-- End Profile Edit Form -->
+    
+                    </div>
+    
+                  </div><!-- End Bordered Tabs -->
+                  <% } %> 
+                </div>
+              </div>
+    
+            </div>
+          </div>
+        </section>
+      
+    
+      </main><!-- End #main -->
+    <!-- End #main -->
+    <!-- Scrollable modal -->
+    
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/formHandler/editStaff.js"></script>
+    <script src="/formHandler/changePassword.js"></script>
+    <%- include('../snippets/toast.ejs') %>
+    <%- include('../snippets/scripts.ejs') %>
+</body>
+</html>

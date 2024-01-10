@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+    
+        <div class="pagetitle">
+            <h1>Payroll Form</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+                    <li class="breadcrumb-item active">Pay Salary</li>
+
+
+                    
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+                                        
+              <section class="section register d-flex flex-column align-items-center justify-content-center py-4">
+                <div class="container">
+                  <div class="row justify-content-center">
+                    <div class="col-lg-8 col-md-6 d-flex flex-column align-items-center justify-content-center">
+        
+                
+        
+                      <div class="card ">
+        
+                        <div class="card-body">
+        
+                          <div class="pt-4">
+                            <h5 class="card-title text-center pb-0 fs-4">Payroll Form </h5>                          </div>
+                            <% if (context.staff) { %>
+                              <form action="" id="payrollForm" class="row g-3">
+                                <div class="col-md-6">
+                                  <label for="inputName" class="form-label">Name</label>
+                                  <input type="text" name="name" class="form-control" value="<%= context.staff.fName %>">
+                                  <div class="nameErr error"></div>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="inputPackage" class="form-label">Position</label>
+                                  <input type="text" name="position" class="form-control" value="<%= context.staff.position %>">
+                                  <div class="cateErr error"></div>
+                                </div>
+                              
+                                <input name="stock_id" type="hidden" class="form-control" id="Country">
+                              
+                                <div class="col-md-6">
+                                  <label for="inputPackage" class="form-label">Amount</label>
+                                  <input type="text" name="amount" class="form-control" value="<%= context.staff.amount %>">
+                                  <div class="ptypErr error"></div>
+                                </div>
+                                <div class="col-md-6">
+                                  <label for="inputWholesale" class="form-label">Allowance</label>
+                                  <input type="text" name="allowance" class="form-control">
+                                  <div class="whpricErr error"></div>
+                                </div>
+                              
+                                <!-- Add hidden input fields for Paystack integration -->
+                                <input type="hidden" name="paystackEmail" value="<%= context.staff.email %>">
+                                <input type="hidden" name="paystackAmount" value="<%= context.staff.amount %>">
+                                <input type="hidden" name="employeeName" value="<%= context.staff.fName %>">
+                                <input type="hidden" name="salary" value="<%= context.staff.amount %>">
+                              
+                                <div class="col-6">
+                                  <button type="button" class="btn btn-success" onclick="processPayment()">Pay</button>
+                                </div>
+                              </form>
+                            <% } %>
+                        </div>
+                      </div>
+        
+                    
+        
+                    </div>
+                  </div>
+                </div>
+        
+              </section>
+              
+        
+            
+          
+       
+    </main>
+    <!-- End #main -->
+    
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+      <!-- Paystack Integration Script -->
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+  function processPayment() {
+    // Fetch form data
+    const payrollForm = document.getElementById('payrollForm');
+    const formData = new FormData(payrollForm);
+
+    // Get form values
+    const name = formData.get('name');
+    const amount = formData.get('amount');
+    const position = formData.get('position');
+    const allowance = formData.get('allowance');
+
+    // Get Paystack-related values from hidden fields
+    const paystackEmail = formData.get('paystackEmail');
+    const paystackAmount = parseFloat(formData.get('paystackAmount'));
+    const employeeName = formData.get('employeeName');
+    const salary = formData.get('salary');  
+
+    // Create Paystack inline payment form
+    const handler = PaystackPop.setup({
+      key: 'pk_test_dd3303211a783a9544575c11986d68bf1cd8f6af', // Replace with your Paystack public key
+      email: paystackEmail,
+      amount: paystackAmount * 1000, // Paystack amount is in kobo
+      currency: 'NGN',
+      ref: 'payroll_' + Math.floor((Math.random() * 1000000000) + 1), // Generate a unique reference
+      metadata: {
+        custom_fields: [
+          {
+            display_name: "Employee Name",
+            variable_name: "name",
+            value: employeeName
+          },
+          {
+            display_name: "Salary",
+            variable_name: "salary",
+            value: salary
+          }
+        ]
+      },
+      callback: function(response) {
+        // Handle successful payment
+        console.log(response);
+        alert('Payment successful! Transaction reference: ' + response.reference);
+      },
+      onClose: function() {
+        // Handle close
+        alert('Payment closed without completion.');
+      }
+    });
+
+    // Open Paystack payment form
+    handler.openIframe();
+  }
+</script>
+
+
+    
+    <%- include('../snippets/toast.ejs') %>
+    <!-- Vendor JS Files -->
+    <%- include('../snippets/scripts.ejs') %>
+</body>
+</html>

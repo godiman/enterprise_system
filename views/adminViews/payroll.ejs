@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Admin | Enterprise System</title>
+    
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <main id="main" class="main">
+    
+        <div class="pagetitle">
+            <h1>Staff</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+                    <li class="breadcrumb-item active">Payroll</li>
+    
+                </ol>            </nav>
+        </div><!-- End Page Title -->
+        
+        <section class="section mt-5">
+            <div class="row">
+              <div class="col-lg-12">
+
+                <!-- table start -->
+          <div class="col-12">
+            
+      
+
+              <div class="card-body">
+
+                <table class="table table-borderless datatable">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Amount</th>
+                      <th scope="col">Allowance</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if (context.staffs) { %>
+                    <% context.staffs.forEach(staff => { %>
+                    <tr>
+                      <th scope="row"><%= staff.fName %></th>
+                      <td><%= staff.position %></td>
+                      <td><%= staff.amount %></td>
+                      <td><%= staff.amount %></td>
+                      <td><span class="badge bg-success">Approved</span></td>
+                      <td class="them">12-05-2023</td>
+                    </tr>
+                    <% }) %>                      
+                    <% } %> 
+                  </tbody>
+                </table>
+
+              </div>
+
+            
+          </div>
+      
+              </div>
+            </div>
+        </section>
+    
+    
+    </main>
+    <!-- End #main -->
+    <!-- Scrollable modal -->
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="/formHandler/staff.js"></script>
+    <script src="/formHandler/deleteStaff.js"></script>
+    <%- include('../snippets/toast.ejs') %>
+    <%- include('../snippets/scripts.ejs') %>
+
+</body>
+</html>

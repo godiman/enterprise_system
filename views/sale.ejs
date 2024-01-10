@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('./snippets/header.ejs') %>
+        <!-- Template Main CSS File -->
+        <link href="/css/sale.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+
+    <!-- End Header -->
+
+    <!-- End #main -->
+    <main id="main" class="main">
+
+        <section class="section dashboard">
+            <div class="row">
+                <% if (context.stocks) { %>
+                    <% context.stocks.forEach((stock, index) => { %>
+                        <!-- Sales Card -->
+                        <div class="col-lg-4 col-md-10 col-sm-12">
+                            <div class="card info-card" id="itemCard<%= index + 1 %>">
+                                <div class="card-body">
+                                    <h6 class="mt-2 h6" id="brand">
+                                        <%= stock.brand %>
+                                    </h6>
+                                    <input type="hidden" value="<%= stock._id %>"  id="stock_id">
+                                    <div class="d-flex align-items-center">
+                                        <div class="ps-5">
+                                            <label for="price<%= index + 1 %>">Price:</label>
+                                            <select  id="price<%= index + 1 %>" class="price">
+                                                <option value="<%= stock.wholePrice %>">$<%= stock.wholePrice %></option>
+                                                <option value="<%= stock.unitPrice %>">$<%= stock.unitPrice %></option>
+                                            </select>
+                                            <!-- Assuming stock.pakagingType contains package type information -->
+                                            <label for="packageType<%= index + 1 %>">Package type:</label>
+                                            <select id="packageType<%= index + 1 %>" class="packageType">
+                                                <% if (context.packages) { %>
+                                                    <% context.packages.forEach(package=> { %>
+                                                        <option value="<%= package.pakagingType %>"><%= package.pakagingType %></option>                                                   
+                                                     <% }) %>
+                                                    <% } %>  
+                                                
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex align-items-center mt-1 mb-3 justify-content-center hidden">
+                                        <label for="quantity<%= index + 1 %>">Quantity:</label>
+                                        <input type="number" class="quantity" id="quantity<%= index + 1 %>">
+                                    </div>
+                                    <button class="btn btn-outline-success btn-sm" onclick="addToCart('itemCard<%= index + 1 %>')">Add to Cart</button>
+                                </div>
+                            </div>
+                        </div>
+                    <% }) %>
+                <% } %>
+                <!-- End Left side columns -->
+            </div>
+            <!-- Right side columns -->
+            <div class="col-lg-4 ms-auto">
+
+                <!-- Recent Activity -->
+                <div class="card" id="totalCard" style="display:none;">
+                    <div class="card-body">
+                        <h5 class="card-title">Selected Item</h5>
+                
+                        <ul id="cartList"></ul>
+                        <p id="overallTotal">Overall Total: $0</p>
+                        <button type="button" class="btn btn-success" onclick="calculateOverallTotal()">Calculate Overall Total</button>
+                        
+                        <!-- Add Sale button and success message div -->
+                        <button type="button" class="btn btn-primary" onclick="processSale()">Sale</button>
+                        <div id="successMessage" style="display: none; color: green; margin-top: 10px;">Items successfully sold!</div>
+                    </div>
+                </div>
+                <!-- End Recent Activity -->
+            </div>
+        </section>
+
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <%- include('./snippets/adminFooter.ejs') %>
+        <!-- End Footer -->
+
+        <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+        class="bi bi-arrow-up-short"></i></a>
+        <script src="/formHandler/proccessSale.js"></script>
+        <script>
+            let cart = [];
+            function addToCart(cardId) {
+    // Get the card element
+    var cardElement = document.getElementById(cardId);
+
+    // Get the selected price, package type, and quantity input values within the card
+    var priceInput = cardElement.querySelector('.price');
+    var packageTypeInput = cardElement.querySelector('.packageType');
+    var quantityInput = cardElement.querySelector('.quantity');
+    var stockIdInput = cardElement.querySelector('input[type="hidden"]');
+
+    var priceString = priceInput.value;
+    var priceWithoutCommas = priceString.replace(/,/g, '');
+    var price = parseInt(priceWithoutCommas);
+    var packageType = packageTypeInput.value;
+    var quantity = parseInt(quantityInput.value);
+    var stockId = stockIdInput.value;
+    console.log(stockId);
+
+    var brand = cardElement.querySelector('.h6').textContent;
+    // Calculate wholeQty and unitQty based on wholePrice and unitPrice
+    var wholeQty = packageType === 'Whole' ? Math.floor(quantity / price) : 0;
+    var unitQty = packageType === 'Unit' ? Math.floor(quantity / price) : 0;
+
+    // Add item to the cart with details, including wholeQty and unitQty
+    cart.push({ brand, price, packageType, quantity, wholeQty, unitQty, stockId });
+
+    // Display the items in the cart
+    displayCartItems();
+
+    // Toggle the visibility of the total card
+    displayTotalCard();
+}
+            function displayCartItems() {
+                    // Display the items in the cart
+                    var cartList = document.getElementById('cartList');
+                    cartList.innerHTML = '';
+
+                    cart.forEach((item, index) => {
+                        var listItem = document.createElement('li');
+                        listItem.textContent = `Item ${index + 1}: ${item.brand}, Price $${item.price}, Package Type ${item.packageType}, Quantity ${item.quantity}`;
+                        cartList.appendChild(listItem);
+                    });
+                }
+
+            function displayTotalCard() {
+                    // Show the total card if there are items in the cart, hide it otherwise
+                    var totalCard = document.getElementById('totalCard');
+                    totalCard.style.display = cart.length > 0 ? 'block' : 'none';
+                }
+
+            function calculateOverallTotal() {
+                    // Calculate the overall total from the items in the cart
+                    var overallTotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+                    // Display the overall total in the total card
+                    var overallTotalDisplay = document.getElementById('overallTotal');
+                    overallTotalDisplay.textContent = 'Overall Total: $' + overallTotal;
+                }
+
+        </script>
+            
+            
+        <!-- Vendor JS Files -->
+        <%- include('./snippets/scripts.ejs') %>
+
+</body>
+
+</html>

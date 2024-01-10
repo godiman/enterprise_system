@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   
+    <title>Admin | Enterprise System</title>
+
+    <!-- Online CSS Links -->
+    <%- include('../snippets/header.ejs') %>
+    <!-- Template Main CSS File -->
+    <link href="/css/style.css" rel="stylesheet">
+</head>
+<body>
+
+    <!-- ======= Header ======= -->
+    <%- include('../snippets/nav.ejs') %>
+    <!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <%- include('../snippets/sidebar.ejs') %>
+    <!-- End Sidebar-->
+
+    <!-- End #main -->
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1>Admin</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/admin/home">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <section class="section dashboard">
+            <div class="row">
+
+                <!-- Left side columns -->
+                <div class="col-lg-12">
+                    <div class="row">
+
+                        <!-- Sales Card -->
+                        <div class="col-lg-4">
+                            <div class="card info-card sales-card">
+
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Stocks <span>| Today</span></h5>
+                                    <% if (context.stocks) { %>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                            <i class="bi bi-cart"></i>
+                                        </div>
+                                            
+                                        <h6 class="ps-3">
+                                            <%= context.stocks %>
+                                        </h6>
+                                        <% } else { %>
+
+                                        <h6 class="ps-3">0</h6>
+
+                                        <% } %>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card info-card sales-card">
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Staff</h5>
+                                    <% if (context.staffs) { %>
+                                        <div class="d-flex align-items-center">
+                                            <div
+                                                class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-people"></i>
+                                            </div>
+                                                
+                                            <h6 class="ps-3">
+                                                <%= context.staffs %>
+                                            </h6>
+                                            <% } else { %>
+    
+                                            <h6 class="ps-3">0</h6>
+    
+                                            <% } %>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <div class="col-lg-4">
+                            <div class="card info-card sales-card">
+
+                                <div class="card-body">
+                                    <h5 class="card-title">Admin</h5>
+
+                                    <% if (context.admins) { %>
+                                        <div class="d-flex align-items-center">
+                                            <div
+                                                class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                                                <i class="bi bi-people"></i>
+                                            </div>
+                                                
+                                            <h6 class="ps-3">
+                                                <%= context.admins %>
+                                            </h6>
+                                            <% } else { %>
+    
+                                            <h6 class="ps-3">0</h6>
+    
+                                            <% } %>
+
+                                        </div>
+                                    </div>
+                            </div>
+
+                        </div>
+                    </div>
+                        
+                </div>
+                        <!-- End Sales Card -->
+               </div>
+              
+        </section>
+    </main>
+    <!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <%- include('../snippets/adminFooter.ejs') %>
+    <!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+    class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <%- include('../snippets/scripts.ejs') %>
+    
+</body>
+</html>
